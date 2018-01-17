@@ -1,0 +1,7 @@
+1. train the model:
+   python run_cnn.py train or python run_rnn.py train
+
+2. predict the album class:
+   python predict.py inter # interact style
+   python predict.py file sourcefilename desfilename #source file content should be like this: XXX XXX XX XXXXX
+   
