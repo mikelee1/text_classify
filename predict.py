@@ -4,6 +4,7 @@
 from cnn_model import *
 from data.cnews_loader import *
 import tensorflow.contrib.keras as kr
+import sys
 
 import time
 from datetime import timedelta
@@ -44,16 +45,41 @@ class CnnModel:
         }
 
         y_pred_cls = self.session.run(self.model.y_pred_cls, feed_dict=feed_dict)
-        return self.categories[y_pred_cls[0]]
+        y_pred_cls_list = self.session.run(self.model.logits, feed_dict=feed_dict).tolist()[0]
+        # return self.categories[y_pred_cls[0]]
+        lis = {}
+        for i in range(len(y_pred_cls_list)):
+            lis[self.categories[i]] = y_pred_cls_list[i]
+        res = self.categories[y_pred_cls[0]]
+        return res, lis
 
 
 if __name__ == '__main__':
-    cnn_model = CnnModel()
-    #test_demo = ['三星ST550以全新的拍摄方式超越了以往任何一款数码相机', '热火vs骑士前瞻：皇帝回乡二番战 东部次席唾手可得新浪体育讯北京时间3月30日7:00']
-    test_demo = ['爱哭的孩子']
-    #for i in test_demo:
-        #print(cnn_model.predict(i))
-    while True:
-        test_demo=input('input name:')
-        print(cnn_model.predict(test_demo))
+    arg = sys.argv
 
+    if len(arg) == 4 and arg[1] == 'file':
+        mode = 'file'
+    elif len(arg) == 2 and arg[1] == 'inter':
+        mode = 'inter'
+    else:
+        raise ValueError('usage: python predict.py [inter] | [file sourfilename desfilename]')
+
+    cnn_model = CnnModel()
+
+    if mode == 'inter':
+        while True:
+            test_demo = input('input name:')
+            res, lis = cnn_model.predict(test_demo)
+            print(res)
+            print(lis)
+    if mode == 'file':
+        filename = arg[2]
+        desfilename = arg[3]
+        with open(filename, 'r') as f:
+            with open(desfilename,'w') as des:
+                tmp = f.read().strip().split(' ')
+                for i in tmp:
+                    res, lis = cnn_model.predict(i)
+                    print(i,res)
+                    data = str(i)+'    '+str(res)+'\n'
+                    des.write(data)

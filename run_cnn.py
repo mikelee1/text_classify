@@ -10,7 +10,7 @@ import time
 from datetime import timedelta
 
 
-base_dir = 'data/cnews_split'
+base_dir = 'data/cnews'
 train_dir = os.path.join(base_dir, 'cnews.train.txt')
 test_dir = os.path.join(base_dir, 'cnews.test.txt')
 val_dir = os.path.join(base_dir, 'cnews.val.txt')
@@ -88,7 +88,7 @@ def train():
     flag = False
     for epoch in range(config.num_epochs):
         print('Epoch:', epoch + 1)
-        batch_train = batch_iter(x_train[:25600], y_train[:25600], config.batch_size)#???
+        batch_train = batch_iter(x_train[:51200], y_train[:51200], config.batch_size)#???
         for x_batch, y_batch in batch_train:
             feed_dict = feed_data(x_batch, y_batch, config.dropout_keep_prob)
 
