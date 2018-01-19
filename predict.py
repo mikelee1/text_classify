@@ -81,5 +81,5 @@ if __name__ == '__main__':
                 for i in tmp:
                     res, lis = cnn_model.predict(i)
                     print(i,res)
-                    data = str(i)+'    '+str(res)+'\n'
+                    data = str(res)+'    '+str(i)+'\n'
                     des.write(data)
