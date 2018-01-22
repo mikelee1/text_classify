@@ -32,6 +32,7 @@ class TextCNN(object):
 
         # 三个待输入的数据
         self.input_x = tf.placeholder(tf.int32, [None, self.config.seq_length], name='input_x')
+        self.input_x1 = tf.placeholder(tf.int32, [None, self.config.seq_length], name='input_x1')
         self.input_y = tf.placeholder(tf.float32, [None, self.config.num_classes], name='input_y')
         self.keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 

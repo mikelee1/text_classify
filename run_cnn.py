@@ -68,8 +68,8 @@ def train():
     print("Loading training and validation data...")
     # 载入训练集与验证集
     start_time = time.time()
-    x_train, y_train = process_file(train_dir, word_to_id, cat_to_id, config.seq_length)#???
-    x_val, y_val = process_file(val_dir, word_to_id, cat_to_id, config.seq_length)
+    x_train, y_train, x1_train = process_file(train_dir, word_to_id, cat_to_id, config.seq_length)#???
+    x_val, y_val,x1_val = process_file(val_dir, word_to_id, cat_to_id, config.seq_length)
     time_dif = get_time_dif(start_time)
     print("Time usage:", time_dif)
 

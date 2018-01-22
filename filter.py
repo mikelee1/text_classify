@@ -1,5 +1,5 @@
 import csv
-file_in = 'source.csv'
+file_in = 'cnews.test.txt'
 
 # ##获取前N列，并将数据写入新的文件
 
@@ -18,8 +18,8 @@ for row in rows:
         #lis.append(row[0])
     if len(row)==2:
         row.insert(1,'\t')
-        row.append('\n')
-        #writer.writerow(row)
+        row.append('\tintroductions\n')
+        writer.writerow(row)
         a=''.join(row)
         f.write(a)
 #print(lis)

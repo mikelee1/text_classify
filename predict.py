@@ -77,9 +77,9 @@ if __name__ == '__main__':
         desfilename = arg[3]
         with open(filename, 'r') as f:
             with open(desfilename,'w') as des:
-                tmp = f.read().strip().split(' ')
+                tmp = f.read().strip().split('\n')
                 for i in tmp:
                     res, lis = cnn_model.predict(i)
-                    print(i,res)
+                    #print(i,res)
                     data = str(res)+'    '+str(i)+'\n'
                     des.write(data)

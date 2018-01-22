@@ -45,24 +45,28 @@ def open_file(filename, mode='r'):
 def read_file(filename):
     """读取文件数据"""
 
-    contents, labels = [], []
+    contents, intros, labels = [], [], []
     with open_file(filename) as f:
         for line in f:
             try:
-                label, content = line.strip().split('\t')
+                label, content, intro = line.strip().split('\t')
                 if content:
                     contents.append(list(native_content(content)))
                     labels.append(native_content(label))
+                    intros.append(list(native_content(intro)))
             except:
                 pass
-    return contents, labels
+    return contents, labels, intros
 
 
 def build_vocab(train_dir, vocab_dir, vocab_size=5000):
     """根据训练集构建词汇表，存储"""
-    data_train, _ = read_file(train_dir)
+    data_train, _ ,intros= read_file(train_dir)
 
     all_data = []
+    intros = intros[0]#todo
+    data_train = data_train+intros
+    print(intros)
     for content in data_train:
         all_data.extend(content)
     counter = Counter(all_data)
@@ -99,19 +103,22 @@ def to_words(content, words):
 
 def process_file(filename, word_to_id, cat_to_id, max_length=600):
     """将文件转换为id表示"""
-    contents, labels = read_file(filename)
+    contents, labels, intros = read_file(filename)
 
-    data_id, label_id = [], []
+    data_id, label_id, intro_id = [], [], []
     for i in range(len(contents)):
         data_id.append(
             [word_to_id[x] for x in contents[i] if x in word_to_id])
         label_id.append(cat_to_id[labels[i]])
+        intro_id.append(
+            [word_to_id[x] for x in intros[i] if x in word_to_id])
 
     # 使用keras提供的pad_sequences来将文本pad为固定长度
     x_pad = kr.preprocessing.sequence.pad_sequences(data_id, max_length)
     y_pad = kr.utils.to_categorical(label_id)  # 将标签转换为one-hot表示，且按照label_id最大值来设置
+    intro_pad = kr.preprocessing.sequence.pad_sequences(intro_id, max_length)
 
-    return x_pad, y_pad
+    return x_pad, y_pad, intro_pad
 
 
 def batch_iter(x, y, batch_size=64):
