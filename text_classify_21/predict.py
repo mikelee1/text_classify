@@ -5,7 +5,7 @@ from cnn_model import *
 from data.cnews_loader import *
 import tensorflow.contrib.keras as kr
 import sys
-
+import pandas as pd
 import time
 from datetime import timedelta
 
@@ -61,6 +61,8 @@ if __name__ == '__main__':
         mode = 'file'
     elif len(arg) == 2 and arg[1] == 'inter':
         mode = 'inter'
+    elif len(arg) == 4 and arg[1] == 'split':
+        mode = 'split'
     else:
         raise ValueError('usage: python predict.py [inter] | [file sourfilename desfilename]')
 
@@ -83,3 +85,13 @@ if __name__ == '__main__':
                     #print(i,res)
                     data = str(res)+'    '+str(i)+'\n'
                     des.write(data)
+    if mode == 'split':
+        filename = arg[2]
+        desfilename = arg[3]
+        df = pd.read_table(filename,sep=',')
+
+        for index in range(len(df.values)):
+            cont=df.values[index]
+            res,lis=cnn_model.predict(cont[2])
+            df.iloc[index,3]=res
+        df.to_csv(desfilename,index=False)
