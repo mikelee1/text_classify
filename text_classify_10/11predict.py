@@ -89,6 +89,7 @@ if __name__ == '__main__':
         filename = arg[2]
         desfilename = arg[3]
         df = pd.read_table(filename,sep=',')
+        df['corr']=0
         total = len(df.values)
         num = 0
         for index in range(total):
@@ -98,8 +99,10 @@ if __name__ == '__main__':
             first = max(tmp)
             tmp.remove(first)
             second = max(tmp)
-            if first/second >=2:
+            corr = first-second
+            if corr >=2:
                 num+=1
             df.iloc[index,3]=res
+            df.iloc[index,4]=round(corr,2)
         print(num/total)
         df.to_csv(desfilename,index=False)

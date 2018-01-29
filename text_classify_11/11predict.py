@@ -101,5 +101,6 @@ if __name__ == '__main__':
             if first/second >=2:
                 num+=1
             df.iloc[index,3]=res
+            df['detail']=lis
         print(num/total)
         df.to_csv(desfilename,index=False)
